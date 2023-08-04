@@ -1,0 +1,55 @@
+server:
+  port: 8081
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          auth:
+            client-id: 'srv-mnt-api'
+            client-secret: 'X48SxHsglSBAOPZglg8AvRfNZVpuyvnc'
+            authorization-grant-type: 'authorization_code'
+            scope: 'openid'
+            issuer-uri: 'http://localhost:8080/realms/auth'
+            user-name-attribute: 'preferred_username'
+            redirect-uri: 'http://localhost:8081/login/oauth2/code/srv-mnt-api'
+        provider:
+          auth:
+            authorization-grant-type: 'authorization_code'
+            authorization-uri: 'http://localhost:8080/realms/auth/protocol/openid-connect/auth'
+            token-uri: 'http://localhost:8080/realms/auth/protocol/openid-connect/token'
+            user-info-uri: 'http://localhost:8080/realms/auth/protocol/openid-connect/userinfo'
+            user-name-attribute: 'sub'
+            jwk-set-uri: 'http://localhost:8080/realms/auth/protocol/openid-connect/certs'
+      resourceserver:
+        jwt:
+          issuer-uri: 'http://localhost:8080/realms/auth'
+          jwk-set-uri: 'http://localhost:8080/realms/auth/protocol/openid-connect/certs'
+  datasource:
+    url: jdbc:mysql://localhost:3308/es-2023?createDatabaseIfNotExist=true
+    username: root
+    password: demo@1234
+    driverClassName: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: "classpath:com.springboot.core.repository/*.xml"
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+  #    java:
+  #      sql: DEBUG
+  #    org:
+  #      mybatis: DEBUG
+  #      apache:
+  #        ibatis: DEBUG
+    core.repository: DEBUG
+
+# Keycloak settings
+keycloak:
+  realm: admin
+  auth-server-url: http://localhost:8081/auth
+  username: nguyethtm1
+  password: admin
+  grant_type: password
+  client-secret: E0SsItqUGoR5z8kBzWxKgmIT57uGWV8q

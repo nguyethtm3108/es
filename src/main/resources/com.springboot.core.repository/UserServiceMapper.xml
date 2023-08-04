@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.domain.repository.UserServiceRepository">
+  <insert
+    flushCache="true"
+    id="create"
+    parameterType="com.api.domain.entity.UserService"
+    timeout="20"
+    keyProperty="id"
+    useGeneratedKeys="true">
+    <![CDATA[
+    INSERT INTO user_service (
+                         user_id
+                        ,service_id
+                        ,status
+                        ,quantity
+                        ,created_by
+    ) VALUES (
+               #{userId}
+             ,#{serviceId}
+             ,#{status}
+             ,#{quantity}
+             ,#{createdBy}
+             )
+    ]]>
+  </insert>
+  <update
+    flushCache="true"
+    id="approve"
+    parameterType="com.api.domain.entity.UserService"
+    timeout="20">
+    <![CDATA[
+    UPDATE
+      user_service
+    SET
+      status = #{status}
+      ,updated_at = #{updatedAt}
+      ,updated_by = #{updatedBy}
+    WHERE
+      id = #{id}
+    ]]>
+  </update>
+  <select id="findById" resultType="com.api.domain.entity.UserService">
+    <![CDATA[
+    SELECT * FROM user_service WHERE id = #{id}
+    ]]>
+  </select>
+<!--  <select id="list"-->
+<!--&lt;!&ndash;    parameterType="com.springboot.demo.mockproject.api.domain.request.search.RequestSearchRequest"&ndash;&gt;-->
+<!--    resultType="com.api.domain.entity.UserService">-->
+<!--    SELECT * FROM user_service-->
+<!--    WHERE 1=1-->
+<!--    <if test="userId != null">AND user_id = #{userId}</if>-->
+<!--    <if test="serviceId != null">AND service_id = #{serviceId}</if>-->
+<!--    <if test="status != null">AND status = ${status}</if>-->
+<!--    ORDER BY id ASC-->
+<!--  </select>-->
+</mapper>

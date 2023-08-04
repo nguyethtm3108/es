@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.api.domain.repository.UserRepository">
+  <insert
+    flushCache="true"
+    id="create"
+    parameterType="com.api.domain.entity.User"
+    timeout="20"
+    keyProperty="id"
+    useGeneratedKeys="true"
+  >
+    <![CDATA[
+    INSERT INTO USER ( id
+                     , first_name
+                     , last_name
+                     , account
+                     , gender
+                     , phone
+                     , address
+                     , created_at
+                     )
+    VALUES ( #{id},
+             #{firstName}
+           , #{lastName}
+           , #{account}
+           , #{gender}
+           , #{phone}
+           , #{address}
+           , #{deletedAt}
+           )
+    ]]>
+  </insert>
+
+  <select id="findAll" parameterType="java.lang.Long" resultType="com.api.domain.entity.User">
+    <![CDATA[
+    SELECT *
+    FROM USER
+    ]]>
+  </select>
+
+  <update id="softDelete" flushCache="true" parameterType="com.api.domain.entity.User" keyProperty="id" timeout="20">
+    UPDATE user SET
+    deleted_at = #{user.deletedAt}
+    where id in
+      <foreach item="item" index="index" collection="ids"
+        open="(" separator="," close=")">
+        #{item}
+      </foreach>
+  </update>
+
+  <delete id="delete">
+<!--    CDATA bên trong sẽ là raw data. => k coi là xml tag => k sử dụng được if. để CDTA vì để tắt format của ide-->
+    <![CDATA[
+    DELETE
+    from user
+    where id = #{id}
+    ]]>
+  </delete>
+
+
+  <select id="search" parameterType="java.lang.Long" resultType="com.api.domain.entity.User">
+    SELECT *
+    FROM user
+    <where>
+      <if test="account != null">AND lower(account) LIKE lower(concat('%',#{account},'%'))</if>
+    </where>
+    ORDER BY id
+    desc
+  </select>
+</mapper>

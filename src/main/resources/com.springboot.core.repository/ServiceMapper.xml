@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.api.domain.repository.ServiceRepository">
+  <insert
+    flushCache="true"
+    id="create"
+    parameterType="com.api.domain.entity.Service"
+    timeout="20"
+    keyProperty="id"
+    useGeneratedKeys="true"
+  >
+    <![CDATA[
+    INSERT INTO service ( id
+                     , name
+                     , description
+                     , status
+                     , created_at
+                     )
+    VALUES ( #{id}
+           , #{name}
+           , #{description}
+           , #{status}
+           , #{createAt}
+           )
+    ]]>
+  </insert>
+
+  <select id="findAll" parameterType="java.lang.Long" resultType="com.api.domain.entity.Service">
+    <![CDATA[
+    SELECT *
+    FROM service
+    ]]>
+  </select>
+
+  <update id="softDelete" flushCache="true" parameterType="com.api.domain.entity.Service" keyProperty="id" timeout="20">
+    UPDATE user SET
+    deleted_at = #{user.deletedAt}
+    where id in
+      <foreach item="item" index="index" collection="ids"
+        open="(" separator="," close=")">
+        #{item}
+      </foreach>
+  </update>
+
+  <delete id="delete">
+<!--    CDATA bên trong sẽ là raw data. => k coi là xml tag => k sử dụng được if. để CDTA vì để tắt format của ide-->
+    <![CDATA[
+    DELETE
+    from user
+    where id = #{id}
+    ]]>
+  </delete>
+
+
+  <select id="search" parameterType="java.lang.Long" resultType="com.api.domain.entity.Service">
+    SELECT *
+    FROM user
+    <where>
+      <if test="account != null">AND lower(account) LIKE lower(concat('%',#{account},'%'))</if>
+      <if test="id != null">AND id = #{id}</if>
+    </where>
+    ORDER BY id
+    desc
+  </select>
+
+
+  <update id="approve" flushCache="true" parameterType="com.api.domain.entity.Service" keyProperty="id" timeout="20">
+    UPDATE service SET
+      updated_at = #{service.updated_at},
+      updated_by = #{service.update_by},
+      status = #{service.status}
+    where id = #{id}
+  </update>
+
+  <update
+    flushCache="true"
+    id="update"
+    parameterType="com.api.domain.entity.Service"
+    timeout="20"
+    keyProperty="id">
+    <![CDATA[
+    UPDATE service SET
+        name = #{service.name},
+        description = #{service.description},
+        updated_by = #{service.updatedBy}
+    where id = #{id}
+    ]]>
+  </update>
+
+</mapper>

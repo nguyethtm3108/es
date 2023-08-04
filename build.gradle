@@ -1,0 +1,59 @@
+
+buildscript {
+    dependencies {
+        classpath "org.flywaydb:flyway-core:9.8.1"
+        classpath 'org.flywaydb:flyway-mysql:9.17.0'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id "org.flywaydb.flyway" version "9.8.1"
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.mysql:mysql-connector-j:8.0.33'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.keycloak:keycloak-spring-boot-starter:21.0.1'
+    implementation 'org.keycloak:keycloak-admin-client:22.0.1'
+
+
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+flyway {
+    url = 'jdbc:mysql://localhost:3308/es-2023?createDatabaseIfNotExist=true'
+    user = 'root'
+    password = 'demo@1234'
+    schemas = ['es-2023']
+    cleanDisabled = false
+}

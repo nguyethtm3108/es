@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.api.domain.repository.UserRepository">
+  <insert
+    flushCache="true"
+    id="create"
+    parameterType="com.api.domain.entity.User"
+    timeout="20">
+    <![CDATA[
+    INSERT INTO USER ( id
+                     , first_name
+                     , last_name
+                     , account
+                     , phone
+                     , gender)
+    VALUES ( #{id}
+           , #{firstName}
+           , #{lastName}
+           , #{account}
+           , #{username}
+           , #{gender})
+    ]]>
+  </insert>
+
+  <select id="findAll" parameterType="java.lang.Long" resultType="com.api.domain.entity.User">
+    <![CDATA[
+    SELECT id
+         , first_name
+         , last_name
+         , account
+         , phone
+         , gender
+    FROM USER
+    ]]>
+  </select>
+</mapper>
